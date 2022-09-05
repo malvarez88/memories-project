@@ -14,29 +14,38 @@ const Form = ({ currentId, setCurrentId }) => {
     tags: "",
     selectedFile: "",
   });
- 
-  const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null)
+
+  const post = useSelector((state) =>
+    currentId ? state.posts.find((p) => p._id === currentId) : null
+  ); //find the especific post to update
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  useEffect(()=> {
-    if(post) setPostData(post);
-  },[post])
+  useEffect(() => {
+    if (post) setPostData(post);
+  }, [post]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (currentId === 0) {
+    if (currentId === null) {
       dispatch(createPost(postData));
       clear();
     } else {
       dispatch(updatePost(currentId, postData));
+      //from here is ok!
       clear();
     }
   };
 
   const clear = () => {
-    setCurrentId(0);
-    setPostData({ creator: '', title: '', message: '', tags: '', selectedFile: '' });
+    setCurrentId(null);
+    setPostData({
+      creator: "",
+      title: "",
+      message: "",
+      tags: "",
+      selectedFile: "",
+    });
   };
 
   return (
@@ -47,7 +56,9 @@ const Form = ({ currentId, setCurrentId }) => {
         className={`${classes.root} ${classes.form}`}
         onSubmit={handleSubmit}
       >
-        <Typography variant="h6">{currentId ? 'Editing' : 'Creating'} a Memory</Typography>
+        <Typography variant="h6">
+          {currentId ? "Editing" : "Creating"} a Memory
+        </Typography>
         <TextField
           name="creator"
           variant="outlined"
@@ -82,7 +93,9 @@ const Form = ({ currentId, setCurrentId }) => {
           label="Tags"
           fullWidth
           value={postData.tags}
-          onChange={(e) => setPostData({ ...postData, tags: e.target.value })} // using spread operator, the data persist but only changes the value that is in the textField
+          onChange={(e) =>
+            setPostData({ ...postData, tags: e.target.value.split(",") })
+          } // using spread operator, the data persist but only changes the value that is in the textField
         />
         <div className={classes.fileInput}>
           <FileBase

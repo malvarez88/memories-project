@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, AppBar, Typography, Grow, Grid } from "@material-ui/core";
 
 import { useDispatch } from "react-redux";
-import { getPost } from './store/posts'
+import { getPost } from "./store/posts";
 
 import Posts from "./components/Posts/Posts";
 import Form from "./components/Form/Form";
@@ -17,7 +17,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getPost());
-  }, [dispatch])
+  }, [currentId, dispatch]);
 
   return (
     <Container maxWidth="lg">
@@ -30,16 +30,17 @@ const App = () => {
       <Grow in>
         <Container>
           <Grid
+            className={classes.mainContainer}
             container
             justifyContent="space-between"
             alignItems="stretch"
             spacing={3}
           >
             <Grid item xs={12} sm={7}>
-              <Posts setCurrentId={setCurrentId}/>
+              <Posts setCurrentId={setCurrentId} />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Form currentId={currentId} setCurrentId={setCurrentId}/>
+              <Form currentId={currentId} setCurrentId={setCurrentId} />
             </Grid>
           </Grid>
         </Container>

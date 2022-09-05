@@ -1,12 +1,14 @@
-import { configureStore} from '@reduxjs/toolkit'
-import logger from "redux-logger"
-import postsReducer from './posts'
-
+import { configureStore } from "@reduxjs/toolkit";
+import logger from "redux-logger";
+import postsReducer from "./posts";
 
 const store = configureStore({
-  middleware:(getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }).concat(logger),
   reducer: {
-    posts:postsReducer,
+    posts: postsReducer,
   },
-})
-export default  store;
+});
+export default store;

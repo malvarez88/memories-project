@@ -21,11 +21,27 @@ export const createPost = async (newPost) => {
 };
 
 export const updatePost = async (id, updatedPost) => {
-    console.log("🚀 ~ file: index.js ~ line 24 ~ updatePost ~ updatedPost", updatedPost)
-    
   try {
     const uPost = await axios.patch(`${url}/${id}`, updatedPost);
     return uPost.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deletePost = async (id) => {
+  try {
+    const dPost = await axios.delete(`${url}/${id}`);
+    return dPost;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const likePost = async (id) => {
+  try {
+    const likeP = await axios.patch(`${url}/${id}/likePost`);
+    return likeP;
   } catch (error) {
     console.log(error);
   }
