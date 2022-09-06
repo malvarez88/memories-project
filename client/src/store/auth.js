@@ -6,9 +6,27 @@ export const authGoogle = createAsyncThunk("AUTH", ({result, token}) => {
 });
 
 export const logOut = createAsyncThunk("LOGOUT", (user) => {
-    console.log("🚀 ~ file: auth.js ~ line 9 ~ logOut ~ user", user)
     return user;
-})
+});
+
+export const signIn = createAsyncThunk("SIGN_IN", (formData, history) => {
+    try {
+        //sign in the user
+        history.push('/');
+    } catch (error) {
+        console.log(error);
+    }
+
+});
+
+export const signUp = createAsyncThunk("SIGN_UP", (formData, history) => {
+    try {
+        //sign up the user
+        history.push('/');
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 
 const authReducer = createReducer({authData: null}, {
@@ -19,7 +37,7 @@ const authReducer = createReducer({authData: null}, {
     [logOut.fulfilled] : (state, action) => {
         localStorage.clear();
         return {...state, authData: null};
-    }
+    },
 });
 
 
