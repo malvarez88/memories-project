@@ -9,10 +9,11 @@ import {
   TextField,
 } from "@material-ui/core";
 import { useDispatch } from "react-redux";
-import { gapi } from 'gapi-script';
-import { useHistory } from 'react-router-dom';
+import { gapi } from "gapi-script";
+import { useHistory } from "react-router-dom";
 
-import { authGoogle } from "../../store/auth";
+import { authGoogle, signIn, signUp } from "../../store/auth";
+
 
 import Icon from "./Icon";
 
@@ -24,20 +25,45 @@ import Input from "./Input";
 
 import useStyles from "./styles";
 
+const initialState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
+
 const Auth = () => {
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignUp] = useState(false);
+  const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
   const history = useHistory();
 
-  useEffect(() => { function start()
-             { gapi.client.init({ clientId: '563431563333-j8sqjqurkgp6d0ku9gcq4cf5dsrjsggt.apps.googleusercontent.com', scope: 'email', });
-             } gapi.load('client:auth2', start); }, []);
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        clientId:
+          "563431563333-j8sqjqurkgp6d0ku9gcq4cf5dsrjsggt.apps.googleusercontent.com",
+        scope: "email",
+      });
+    }
+    gapi.load("client:auth2", start);
+  }, []);
 
-  const handleSubmit = () => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if(isSignup){
+      dispatch(signUp(formData, history))
+    } else {
+      dispatch(signIn(formData, history))
+    }
+  };
 
-  const handleChange = () => {};
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -48,20 +74,20 @@ const Auth = () => {
     handleShowPassword(false);
   };
 
-  const googleSucces = async (res) => {       
+  const googleSucces = async (res) => {
     const result = res.profileObj;
     const token = res.tokenId;
     try {
-        dispatch(authGoogle({result, token}));
-        history.push('/');
+      dispatch(authGoogle({ result, token }));
+      history.push("/");
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
   };
 
   const googleFailure = (error) => {
-    console.log(error) 
-    console.log('Google Sign In was unsuccessful. Try Again Later');
+    console.log(error);
+    console.log("Google Sign In was unsuccessful. Try Again Later");
   };
 
   return (
@@ -138,7 +164,7 @@ const Auth = () => {
             )}
             onSuccess={googleSucces}
             onFailure={googleFailure}
-            cookiePolicy={'single_host_origin'}
+            cookiePolicy={"single_host_origin"}
           />
           <Grid container justifyContent="flex-end">
             <Grid item>
