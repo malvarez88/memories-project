@@ -10,6 +10,9 @@ import {
 } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { gapi } from 'gapi-script';
+import { useHistory } from 'react-router-dom';
+
+import { authGoogle } from "../../store/auth";
 
 import Icon from "./Icon";
 
@@ -26,6 +29,7 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignUp] = useState(false);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => { function start()
              { gapi.client.init({ clientId: '563431563333-j8sqjqurkgp6d0ku9gcq4cf5dsrjsggt.apps.googleusercontent.com', scope: 'email', });
@@ -44,11 +48,12 @@ const Auth = () => {
     handleShowPassword(false);
   };
 
-  const googleSucces = async (res) => {
+  const googleSucces = async (res) => {       
     const result = res.profileObj;
     const token = res.tokenId;
     try {
-        dispatch({type: 'AUTH', data: { result, token }})
+        dispatch(authGoogle({result, token}));
+        history.push('/');
     } catch (error) {
         console.log(error)
     }
