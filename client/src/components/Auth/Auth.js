@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Avatar,
   Button,
@@ -8,6 +8,8 @@ import {
   Container,
   TextField,
 } from "@material-ui/core";
+import { useDispatch } from "react-redux";
+import { gapi } from 'gapi-script';
 
 import Icon from "./Icon";
 
@@ -23,6 +25,11 @@ const Auth = () => {
   const classes = useStyles();
   const [showPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignUp] = useState(false);
+  const dispatch = useDispatch();
+
+  useEffect(() => { function start()
+             { gapi.client.init({ clientId: '563431563333-j8sqjqurkgp6d0ku9gcq4cf5dsrjsggt.apps.googleusercontent.com', scope: 'email', });
+             } gapi.load('client:auth2', start); }, []);
 
   const handleSubmit = () => {};
 
@@ -37,11 +44,18 @@ const Auth = () => {
     handleShowPassword(false);
   };
 
-  const googleSucces = (res) => {
-    console.log(res);
+  const googleSucces = async (res) => {
+    const result = res.profileObj;
+    const token = res.tokenId;
+    try {
+        dispatch({type: 'AUTH', data: { result, token }})
+    } catch (error) {
+        console.log(error)
+    }
   };
 
-  const googleFailure = () => {
+  const googleFailure = (error) => {
+    console.log(error) 
     console.log('Google Sign In was unsuccessful. Try Again Later');
   };
 
@@ -103,7 +117,7 @@ const Auth = () => {
             {isSignup ? "Sign Up" : "Sign In"}
           </Button>
           <GoogleLogin
-            clientId="GOOGLE ID"
+            clientId="563431563333-j8sqjqurkgp6d0ku9gcq4cf5dsrjsggt.apps.googleusercontent.com"
             render={(renderProps) => (
               <Button
                 className={classes.googleButton}
@@ -119,7 +133,7 @@ const Auth = () => {
             )}
             onSuccess={googleSucces}
             onFailure={googleFailure}
-            cookiePolicy='single_host_origin'
+            cookiePolicy={'single_host_origin'}
           />
           <Grid container justifyContent="flex-end">
             <Grid item>
