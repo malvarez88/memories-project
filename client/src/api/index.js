@@ -51,7 +51,7 @@ export const likePost = async (id) => {
 
 export const signin = async (formData) => {
   try {
-    const sIn = await API.post('/user/signup');
+    const sIn = await API.post('/user/signin', formData);
     return sIn;
   } catch (error) {
     console.log(error);
@@ -59,9 +59,12 @@ export const signin = async (formData) => {
 };
 
 export const signup = async (formData) => {
+console.log("🚀 ~ file: index.js ~ line 62 ~ signup ~ formData", formData)
   try {
-    const sUp = await API.post('/user/signin');
-    return sUp;
+    const sUp = await API.post('/user/signup', formData);
+    console.log("🚀 ~ file: index.js ~ line 65 ~ signup ~ sUp", sUp) //undefined
+    
+    return sUp ;
   } catch (error) {
     console.log(error);
   }

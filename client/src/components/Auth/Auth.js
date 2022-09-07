@@ -6,24 +6,23 @@ import {
   Grid,
   Typography,
   Container,
-  TextField,
 } from "@material-ui/core";
 import { useDispatch } from "react-redux";
-import { gapi } from "gapi-script";
+
 import { useHistory } from "react-router-dom";
 
+import { GoogleLogin } from "@react-oauth/google";
+
 import { authGoogle, signIn, signUp } from "../../store/auth";
-
-
-import Icon from "./Icon";
-
-import { GoogleLogin } from "react-google-login";
 
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 
 import Input from "./Input";
 
 import useStyles from "./styles";
+
+import axios from "axios";
+import jwt_decode from 'jwt-decode';
 
 const initialState = {
   firstName: "",
@@ -41,23 +40,12 @@ const Auth = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  useEffect(() => {
-    function start() {
-      gapi.client.init({
-        clientId:
-          "563431563333-j8sqjqurkgp6d0ku9gcq4cf5dsrjsggt.apps.googleusercontent.com",
-        scope: "email",
-      });
-    }
-    gapi.load("client:auth2", start);
-  }, []);
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(isSignup){
-      dispatch(signUp(formData, history))
+    if (isSignup) {
+      dispatch(signUp(formData, history));
     } else {
-      dispatch(signIn(formData, history))
+      dispatch(signIn(formData, history));
     }
   };
 
@@ -74,18 +62,13 @@ const Auth = () => {
     setShowPassword(false);
   };
 
-  const googleSucces = async (res) => {
-    const result = res.profileObj;
-    const token = res.tokenId;
-    try {
-      dispatch(authGoogle({ result, token }));
-      history.push("/");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const createOrGetUser = async (response) => {
+    const { name, picture, email } = jwt_decode(response.credential);
+    dispatch(authGoogle({name,picture,email}));
+    history.push('/');
+}
 
-  const googleFailure = (error) => {
+  const onError = (error) => {
     console.log(error);
     console.log("Google Sign In was unsuccessful. Try Again Later");
   };
@@ -148,24 +131,13 @@ const Auth = () => {
             {isSignup ? "Sign Up" : "Sign In"}
           </Button>
           <GoogleLogin
-            clientId="563431563333-j8sqjqurkgp6d0ku9gcq4cf5dsrjsggt.apps.googleusercontent.com"
-            render={(renderProps) => (
-              <Button
-                className={classes.googleButton}
-                color="primary"
-                fullWidth
-                onClick={renderProps.onClick}
-                disables={renderProps.disable}
-                startIcon={<Icon />}
-                variant="contained"
-              >
-                Sing In with Google
-              </Button>
-            )}
-            onSuccess={googleSucces}
-            onFailure={googleFailure}
-            cookiePolicy={"single_host_origin"}
-          />
+            clientId={process.env.REACT_APP_GOOGLE_PUBLIC_KEY}
+            onSuccess={(credentialResponse) => {
+              createOrGetUser(credentialResponse);
+            }}
+            onError={onError}
+            />
+           
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Button onClick={switchMode}>
