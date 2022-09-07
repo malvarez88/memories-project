@@ -12,8 +12,7 @@ export const logOut = createAsyncThunk("LOGOUT", (user) => {
 export const signUp = createAsyncThunk("SIGN_UP", (formData, history) => {
     console.log("🚀 ~ file: auth.js ~ line 13 ~ signIn ~ formData", formData)
     try {
-        
-        return api.signin({formData});
+        return api.signup({formData});
         // history.push('/');
     } catch (error) {
         console.log(error);
@@ -44,6 +43,7 @@ const authReducer = createReducer({authData: null}, {
         localStorage.setItem('profile', JSON.stringify({...action.payload}))
         return {...state, authData: action.payload};
     },
+    [signUp.rejected] : (state, action) => action.payload,
 });
 
 

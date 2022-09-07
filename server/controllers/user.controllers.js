@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
 import User from "../models/user.js";
 
 export const signIn = async (req, res) => {
@@ -27,7 +26,8 @@ export const signIn = async (req, res) => {
 };
 
 export const signUp = async (req, res) => {
-  const { email, password, confirmPassword, firstName, lastName } = req.body;
+  const { firstName, lastName, email, password, confirmPassword } = req.body;
+  console.log("🚀 ~ file: user.controllers.js ~ line 31 ~ signUp ~ req.body", req.body)
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser)
@@ -36,17 +36,19 @@ export const signUp = async (req, res) => {
       return res.status(400).json({ message: "Passwords don't match." });
     const hashedPassword = await bcrypt.hash(password, 12);
     const createdUser = await User.create({
+      name: `${firstName} ${lastName}`,
       email,
       password: hashedPassword,
-      name: `${firstName} ${lastName}`,
     });
     const token = jwt.sign(
       { email: createdUser.email, id: createdUser._id },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
-    );
+    ); 
     res.status(200).json({ message: createdUser, token });
+    console.log('password', hashedPassword)
   } catch (error) {
+    console.log('Errrrrror!', error)
     res.status(500).json({ message: "Something went wrong." });
   }
 };
