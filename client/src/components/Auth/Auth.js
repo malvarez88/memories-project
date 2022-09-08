@@ -45,6 +45,7 @@ const Auth = () => {
     e.preventDefault();
     if (isSignup) {
       dispatch(signUp(formData, history));
+      console.log("🚀 ~ file: Auth.js ~ line 48 ~ handleSubmit ~ formData", formData) //ok!
     } else {
       dispatch(signIn(formData, history));
     }
