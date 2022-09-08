@@ -3,17 +3,17 @@ import * as api from "../api";
 
 export const authGoogle = createAsyncThunk("AUTH", ({name,picture,email}) => {
     console.log('redux',name,picture,email)
-    return { name, picture, email};
+    return { name, picture, email };
 });
 
 export const logOut = createAsyncThunk("LOGOUT", (user) => {
     return user;
 });
 
-export const signUp = createAsyncThunk("SIGN_UP", (formData, history) => {
-    console.log("🚀 ~ file: auth.js ~ line 13 ~ signUp ~ formData", formData.data)
+export const signUp = createAsyncThunk("SIGN_UP", ( formData ) => {
+    console.log("🚀 ~ file: auth.js ~ line 13 ~ signUp ~ formDatasdasdasdasdsa", formData) //ok
     try {
-        return api.signup(formData.data);
+        return api.signup(formData);
     } catch (error) {
         console.log(error);
     }
