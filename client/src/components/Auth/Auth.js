@@ -6,6 +6,7 @@ import {
   Grid,
   Typography,
   Container,
+  Icon,
 } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 
@@ -130,14 +131,16 @@ const Auth = () => {
           >
             {isSignup ? "Sign Up" : "Sign In"}
           </Button>
+          <Button className={classes.googleButton} color='primary' fullWidth>
           <GoogleLogin
             clientId={process.env.REACT_APP_GOOGLE_PUBLIC_KEY}
             onSuccess={(credentialResponse) => {
               createOrGetUser(credentialResponse);
             }}
             onError={onError}
+            
             />
-           
+           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Button onClick={switchMode}>
