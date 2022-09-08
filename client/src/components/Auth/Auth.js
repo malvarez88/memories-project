@@ -8,7 +8,7 @@ import {
   Container,
   Icon,
 } from "@material-ui/core";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { useHistory } from "react-router-dom";
 
@@ -40,13 +40,17 @@ const Auth = () => {
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
   const history = useHistory();
+  const user = useSelector(state => state.auth);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSignup) {
-      dispatch(signUp(formData, history));
+      await dispatch(signUp(formData));
+      if(user) history.push('/');
     } else {
-      dispatch(signIn(formData, history));
+      await dispatch(signIn(formData));
+      if(user)
+      history.push('/');
     }
   };
 

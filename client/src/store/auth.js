@@ -5,7 +5,7 @@ import * as api from "../api";
 export const authGoogle = createAsyncThunk(
   "AUTH",
   ({ name, picture, email }) => {
-    console.log("redux", name, picture, email);
+    // console.log("redux", name, picture, email);
     return { name, picture, email };
   }
 );
@@ -15,10 +15,10 @@ export const logOut = createAsyncThunk("LOGOUT", (user) => {
 });
 
 export const signUp = createAsyncThunk("SIGN_UP", async (formData) => {
-  console.log("🚀 ~ file: auth.js ~ line 13 ~ signUp ~ formDatasdasdasdasdsa", formData); //ok
+//   console.log("🚀 ~ file: auth.js ~ line 13 ~ signUp ~ formDatasdasdasdasdsa", formData); //ok
   try {
     const singup = await axios.post('http://localhost:3001/user/signup', formData)
-    return singup;
+    return singup.data;
   } catch (error) {
     console.log(error);
   }
@@ -34,7 +34,7 @@ export const signIn = createAsyncThunk("SIGN_IN", (formData, history) => {
 });
 
 const authReducer = createReducer(
-  { authData: null },
+   localStorage.getItem('profile') ? JSON.parse(localStorage.getItem('profile')) : {authData : null} ,
   {
     [authGoogle.fulfilled]: (state, action) => {
       localStorage.setItem("profile", JSON.stringify({ ...action.payload }));
@@ -42,7 +42,7 @@ const authReducer = createReducer(
     },
     [logOut.fulfilled]: (state, action) => {
       localStorage.clear();
-      return { ...state, authData: null };
+      return { authData: null };
     },
     [signUp.fulfilled]: (state, action) => {
       localStorage.setItem("profile", JSON.stringify({...action.payload}));
