@@ -27,8 +27,6 @@ export const signIn = async (req, res) => {
 
 export const signUp = async (req, res) => {
   const { firstName, lastName, email, password, confirmPassword } = req.body;
-  console.log("🚀 ~ file: user.controllers.js ~ line 30 ~ signUp ~ password", password)
-  console.log("🚀 ~ file: user.controllers.js ~ line 30 ~ signUp ~ req.body", req.body)
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser)

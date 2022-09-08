@@ -58,14 +58,14 @@ export const signin = async (formData) => {
   }
 };
 
-export const signup = async (formData) => {
-console.log("🚀 ~ file: index.js ~ line 62 ~ signup ~ formData", formData)
-  try {
-    const sUp = await API.post('/user/signup', formData);
-    console.log("🚀 ~ file: index.js ~ line 65 ~ signup ~ sUp", sUp) //undefined
+// export const signup = async (formData) => {
+// console.log("🚀 ~ file: index.js ~ line 62 ~ signup ~ formData", formData)
+//   try {
+//     const sUp = await API.post('/user/signup', formData);
+//     console.log("🚀 ~ file: index.js ~ line 65 ~ signup ~ sUp", sUp) //undefined
     
-    return sUp ;
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     return sUp ;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
