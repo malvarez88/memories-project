@@ -3,27 +3,28 @@ import { AppBar, Button, Typography, Toolbar, Avatar } from "@material-ui/core";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import useStyles from "./styles";
 import memories from "../../images/memories.png";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../store/auth";
 
 const Navbar = () => {
   const classes = useStyles();
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
+  // const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation(); 
- 
-
+  const user = useSelector(state => state.auth)
   
   useEffect(() => {
       const token = user && user.token;
-      setUser(JSON.parse(localStorage.getItem("profile")));
-    }, [location]); //Check this!!!
+      if(user.name)
+      history.push('/');
+    }, [user]); //Check this!!!
     
     const logedOut = () => {
         dispatch(logOut({user}))
-        history.push('/');
-        setUser(null);
+        history.push('/'); 
+        // 
+        
     };
     
   return (
@@ -36,12 +37,12 @@ const Navbar = () => {
           variant="h2"
           align="center"
         >
-          Memories
+          Posts
         </Typography>
-        <img className={classes.image} src={memories} alt="icon" height="60" />
+        {/* <img className={classes.image} src={memories} alt="icon" height="60" /> */}
       </div>
       <Toolbar className={classes.toolbar}>
-        {user ? (
+        {user.name ? (
           <div className={classes.profile}>
             <Avatar
               className={classes.purple}

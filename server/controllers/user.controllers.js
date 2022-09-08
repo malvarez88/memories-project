@@ -27,6 +27,8 @@ export const signIn = async (req, res) => {
 
 export const signUp = async (req, res) => {
   const { firstName, lastName, email, password, confirmPassword } = req.body;
+  // console.log("🚀 ~ file: user.controllers.js ~ line 30 ~ signUp ~ req.body", req.body)
+
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser)
@@ -48,7 +50,8 @@ export const signUp = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     ); 
-    res.status(200).json({ message: createdUser, token });
+    // console.log('created user :', createdUser);
+    res.status(200).json({ name: createdUser.name, email: createdUser.email , token });
   } catch (error) {
     console.log('Errrrrror!', error)
     res.status(500).json({ message: "Something went wrong." });
