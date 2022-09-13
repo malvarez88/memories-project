@@ -25,7 +25,7 @@ const Navbar = () => {
     
     const logedOut = () => {
         dispatch(logOut({user}))
-        history.push('/'); 
+        history.go('/'); 
     };
     
   return (

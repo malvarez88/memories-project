@@ -18,6 +18,7 @@ const Home = () => {
     useEffect(() => {
       dispatch(getPost());
     }, [currentId, dispatch]);
+    
   return (
     <Grow in>
         <Container>

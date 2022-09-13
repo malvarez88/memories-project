@@ -70,9 +70,14 @@ const Auth = () => {
   };
 
   const createOrGetUser = async (response) => {
+
+    const user = await jwt_decode(response.credential);
+    console.log("🚀 ~ file: Auth.js ~ line 75 ~ createOrGetUser ~ user", user)
     const { name, picture, email } = await jwt_decode(response.credential);
+ 
+
     dispatch(authGoogle({name,picture,email}));
-    history.go('/');
+    // history.go('/');
 }
 
   const onError = (error) => {
