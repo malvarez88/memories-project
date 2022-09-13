@@ -23,6 +23,7 @@ export const likePost = createAsyncThunk("LIKE_POST", (id) => {
   return api.likePost(id);
 });
 
+
 const postsReducer = createReducer([], {
   [getPost.fulfilled]: (state, action) => action.payload,
   [createPost.fulfilled]: (state, action) => [...state, action.payload],

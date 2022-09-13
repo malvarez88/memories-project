@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, 
+  // useEffect
+ } from "react";
 import {
   Avatar,
   Button,
@@ -6,7 +8,7 @@ import {
   Grid,
   Typography,
   Container,
-  Icon,
+  // Icon,
 } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -22,7 +24,7 @@ import Input from "./Input";
 
 import useStyles from "./styles";
 
-import axios from "axios";
+// import axios from "axios";
 import jwt_decode from 'jwt-decode';
 
 const initialState = {
@@ -46,11 +48,11 @@ const Auth = () => {
     e.preventDefault();
     if (isSignup) {
       await dispatch(signUp(formData));
-      if(user) history.push('/');
+      if(user) history.go('/');
     } else {
       await dispatch(signIn(formData));
       if(user)
-      history.push('/');
+      history.go('/');
     }
   };
 
@@ -68,9 +70,14 @@ const Auth = () => {
   };
 
   const createOrGetUser = async (response) => {
-    const { name, picture, email } = jwt_decode(response.credential);
+
+    const user = await jwt_decode(response.credential);
+    console.log("🚀 ~ file: Auth.js ~ line 75 ~ createOrGetUser ~ user", user)
+    const { name, picture, email } = await jwt_decode(response.credential);
+ 
+
     dispatch(authGoogle({name,picture,email}));
-    history.push('/');
+    // history.go('/');
 }
 
   const onError = (error) => {
@@ -142,7 +149,6 @@ const Auth = () => {
               createOrGetUser(credentialResponse);
             }}
             onError={onError}
-            
             />
            </Button>
           <Grid container justifyContent="flex-end">

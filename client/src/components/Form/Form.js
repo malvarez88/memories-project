@@ -8,12 +8,13 @@ import useStyles from "./styles";
 
 const Form = ({ currentId, setCurrentId }) => {
   const [postData, setPostData] = useState({
-    creator: "",
     title: "",
     message: "",
     tags: "",
     selectedFile: "",
   });
+
+    const user = JSON.parse(localStorage.getItem('profile'));
 
   const post = useSelector((state) =>
     currentId ? state.posts.find((p) => p._id === currentId) : null
@@ -27,11 +28,11 @@ const Form = ({ currentId, setCurrentId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (currentId === 0) {
-      dispatch(createPost(postData));
+    if (currentId === null) {
+      dispatch(createPost({...postData, name: user.name}));
       clear();
     } else {
-      dispatch(updatePost(currentId, postData));
+      dispatch(updatePost(currentId, {...postData, name: user.name}));
       //from here is ok!
       clear();
     }
@@ -40,13 +41,22 @@ const Form = ({ currentId, setCurrentId }) => {
   const clear = () => {
     setCurrentId(null);
     setPostData({
-      creator: "",
       title: "",
       message: "",
       tags: "",
       selectedFile: "",
     });
   };
+
+  if(!user) { 
+    return ( 
+      <Paper className={classes.paper}>
+        <Typography variant="h6" align="center">
+          Please Sign In to create your own post and like others!
+        </Typography>
+      </Paper>
+    )
+  }
 
   return (
     <Paper className={classes.paper}>
@@ -59,16 +69,6 @@ const Form = ({ currentId, setCurrentId }) => {
         <Typography variant="h6">
           {currentId ? "Editing" : "Creating"} a Post
         </Typography>
-        <TextField
-          name="creator"
-          variant="outlined"
-          label="Creator"
-          fullWidth
-          value={postData.creator}
-          onChange={(e) =>
-            setPostData({ ...postData, creator: e.target.value })
-          } // using spread operator, the data persist but only changes the value that is in the textField
-        />
         <TextField
           name="title"
           variant="outlined"

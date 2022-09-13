@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { 
+  // useState, 
+  useEffect } from "react";
 import { AppBar, Button, Typography, Toolbar, Avatar } from "@material-ui/core";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { Link, useHistory, 
+  // useLocation
+ } from "react-router-dom";
 import useStyles from "./styles";
-import memories from "../../images/memories.png";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../store/auth";
 
@@ -11,7 +14,7 @@ const Navbar = () => {
   // const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
   const dispatch = useDispatch();
   const history = useHistory();
-  const location = useLocation(); 
+  // const location = useLocation(); 
   const user = useSelector(state => state.auth)
   
   useEffect(() => {
@@ -22,9 +25,7 @@ const Navbar = () => {
     
     const logedOut = () => {
         dispatch(logOut({user}))
-        history.push('/'); 
-        // 
-        
+        history.go('/'); 
     };
     
   return (
@@ -39,7 +40,6 @@ const Navbar = () => {
         >
           Posts
         </Typography>
-        {/* <img className={classes.image} src={memories} alt="icon" height="60" /> */}
       </div>
       <Toolbar className={classes.toolbar}>
         {user.name ? (
