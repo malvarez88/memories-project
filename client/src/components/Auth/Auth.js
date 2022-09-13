@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, 
+  // useEffect
+ } from "react";
 import {
   Avatar,
   Button,
@@ -6,7 +8,7 @@ import {
   Grid,
   Typography,
   Container,
-  Icon,
+  // Icon,
 } from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -22,7 +24,7 @@ import Input from "./Input";
 
 import useStyles from "./styles";
 
-import axios from "axios";
+// import axios from "axios";
 import jwt_decode from 'jwt-decode';
 
 const initialState = {

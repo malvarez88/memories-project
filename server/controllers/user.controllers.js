@@ -6,6 +6,7 @@ export const signIn = async (req, res) => {
   const { email, password } = req.body;
   try {
     const existingUser = await User.findOne({ email });
+
     if (!existingUser)
       return res.status(404).json({ message: "User doesnt exist." });
     const isPasswordCorrect = await bcrypt.compare(
@@ -19,7 +20,9 @@ export const signIn = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    res.status(200).json({ message: existingUser, token });
+    res
+      .status(200)
+      .json({ name: existingUser.name, email: existingUser.email, token });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong." });
   }
@@ -27,8 +30,6 @@ export const signIn = async (req, res) => {
 
 export const signUp = async (req, res) => {
   const { firstName, lastName, email, password, confirmPassword } = req.body;
-  console.log("🚀 ~ file: user.controllers.js ~ line 30 ~ signUp ~ password", password)
-  // console.log("🚀 ~ file: user.controllers.js ~ line 30 ~ signUp ~ req.body", req.body)
 
   try {
     const existingUser = await User.findOne({ email });
@@ -36,9 +37,9 @@ export const signUp = async (req, res) => {
       return res.status(400).json({ message: "User already exist." });
     if (password !== confirmPassword)
       return res.status(400).json({ message: "Passwords don't match." });
-    // const salt = await bcrypt.genSalt(12);
-    const hashedPassword = await bcrypt.hash(password, 10)
-    // console.log("🚀 ~ file: user.controllers.js ~ line 43 ~ hashedPassword ~ hashedPassword", hashedPassword)
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const createdUser = await User.create({
       name: `${firstName} ${lastName}`,
       email,
@@ -48,12 +49,12 @@ export const signUp = async (req, res) => {
       { email: createdUser.email, id: createdUser._id },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
-    ); 
-    console.log("🚀 ~ file: user.controllers.js ~ line 52 ~ signUp ~ token", token)
-  
-    res.status(200).json({ name: createdUser.name, email: createdUser.email , token });
+    );
+    res
+      .status(200)
+      .json({ name: createdUser.name, email: createdUser.email, token });
   } catch (error) {
-    console.log('Errrrrror!', error)
+    console.log("Errrrrror!", error);
     res.status(500).json({ message: "Something went wrong." });
   }
 };
