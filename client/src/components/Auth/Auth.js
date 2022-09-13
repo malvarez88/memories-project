@@ -46,11 +46,11 @@ const Auth = () => {
     e.preventDefault();
     if (isSignup) {
       await dispatch(signUp(formData));
-      if(user) history.push('/');
+      if(user) history.go('/');
     } else {
       await dispatch(signIn(formData));
       if(user)
-      history.push('/');
+      history.go('/');
     }
   };
 
@@ -68,9 +68,9 @@ const Auth = () => {
   };
 
   const createOrGetUser = async (response) => {
-    const { name, picture, email } = jwt_decode(response.credential);
+    const { name, picture, email } = await jwt_decode(response.credential);
     dispatch(authGoogle({name,picture,email}));
-    history.push('/');
+    history.go('/');
 }
 
   const onError = (error) => {
@@ -142,7 +142,6 @@ const Auth = () => {
               createOrGetUser(credentialResponse);
             }}
             onError={onError}
-            
             />
            </Button>
           <Grid container justifyContent="flex-end">
