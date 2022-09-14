@@ -24,33 +24,9 @@ const Post = ({ post, setCurrentId }) => {
 
   const user = JSON.parse(localStorage.getItem("profile"));
 
-  // const Likes = () => {
-  //   if (likes.length > 0) {
-  //     return likes.find((like) => like === userId) ? (
-  //       <>
-  //         <ThumbUpAltIcon fontSize="small" />
-  //         &nbsp;
-  //         {likes.length > 2
-  //           ? `You and ${likes.length - 1} others`
-  //           : `${likes.length} like${likes.length > 1 ? "s" : ""}`}
-  //       </>
-  //     ) : (
-  //       <>
-  //         <ThumbUpAltOutlined fontSize="small" />
-  //         &nbsp;{likes.length} {likes.length === 1 ? "Like" : "Likes"}
-  //       </>
-  //     );
-  //   }
-  //   return (
-  //     <>
-  //       <ThumbUpAltOutlined fontSize="small" />
-  //       &nbsp;Like
-  //     </>
-  //   );
-  // };
   const Likes = () => {
     if (post.likes.length > 0) {
-      return post.likes.find((like) => like === (user.name )) ? (
+      return post.likes.find((like) => like === (user )) ? (
         <>
           <ThumbUpAltIcon fontSize="small" />
           &nbsp;
@@ -65,7 +41,6 @@ const Post = ({ post, setCurrentId }) => {
         </>
       );
     }
-
     return (
       <>
         <ThumbUpAltOutlined fontSize="small" />

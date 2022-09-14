@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 
 const auth = async (req, res, next) => {
   try {
+    // console.log('REQ: ',req.headers)
     const token = req.headers.authorization.split(" ")[1];
     const isCustomAuth = token.length < 500;
 
@@ -18,7 +19,7 @@ const auth = async (req, res, next) => {
     }
     next();
   } catch (error) {
-    console.log(error);
+    console.log('Error in JWT: ', error);
   }
 };
 
