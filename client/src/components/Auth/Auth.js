@@ -1,6 +1,7 @@
-import React, { useState, 
+import React, {
+  useState,
   // useEffect
- } from "react";
+} from "react";
 import {
   Avatar,
   Button,
@@ -25,7 +26,7 @@ import Input from "./Input";
 import useStyles from "./styles";
 
 // import axios from "axios";
-import jwt_decode from 'jwt-decode';
+import jwt_decode from "jwt-decode";
 
 const initialState = {
   firstName: "",
@@ -42,17 +43,16 @@ const Auth = () => {
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
   const history = useHistory();
-  const user = useSelector(state => state.auth);
+  const user = useSelector((state) => state.auth);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isSignup) {
       await dispatch(signUp(formData));
-      if(user) history.go('/');
+      if (user) history.go("/");
     } else {
       await dispatch(signIn(formData));
-      if(user)
-      history.go('/');
+      if (user) history.go("/");
     }
   };
 
@@ -70,15 +70,13 @@ const Auth = () => {
   };
 
   const createOrGetUser = async (response) => {
-
     const user = await jwt_decode(response.credential);
-    console.log("🚀 ~ file: Auth.js ~ line 75 ~ createOrGetUser ~ user", user)
+    // console.log("🚀 ~ file: Auth.js ~ line 75 ~ createOrGetUser ~ user", user)
     const { name, picture, email } = await jwt_decode(response.credential);
- 
 
-    dispatch(authGoogle({name,picture,email}));
-    // history.go('/');
-}
+    dispatch(authGoogle({ name, picture, email }));
+    history.go("/");
+  };
 
   const onError = (error) => {
     console.log(error);
@@ -142,15 +140,15 @@ const Auth = () => {
           >
             {isSignup ? "Sign Up" : "Sign In"}
           </Button>
-          <Button className={classes.googleButton} color='primary' fullWidth>
-          <GoogleLogin
-            clientId={process.env.REACT_APP_GOOGLE_PUBLIC_KEY}
-            onSuccess={(credentialResponse) => {
-              createOrGetUser(credentialResponse);
-            }}
-            onError={onError}
+          <Button className={classes.googleButton} color="primary" fullWidth>
+            <GoogleLogin
+              clientId={process.env.REACT_APP_GOOGLE_PUBLIC_KEY}
+              onSuccess={(credentialResponse) => {
+                createOrGetUser(credentialResponse);
+              }}
+              onError={onError}
             />
-           </Button>
+          </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Button onClick={switchMode}>

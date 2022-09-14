@@ -4,9 +4,10 @@ import React, {
 import { AppBar, Button, Typography, Toolbar, Avatar } from "@material-ui/core";
 import { Link, useHistory, 
   // useLocation
- } from "react-router-dom";
+} from "react-router-dom";
 import useStyles from "./styles";
 import { useDispatch, useSelector } from "react-redux";
+import decode from 'jwt-decode';
 import { logOut } from "../../store/auth";
 
 const Navbar = () => {
@@ -19,9 +20,12 @@ const Navbar = () => {
   
   useEffect(() => {
       const token = user && user.token;
-      if(user.name)
+      if(token){
+        const decodedToken = decode(token);
+        if(decodedToken.exp * 1000 < new Date().getTime()) logedOut();
+      }
       history.push('/');
-    }, [user]); //Check this!!!
+    }, [user]);
     
     const logedOut = () => {
         dispatch(logOut({user}))
